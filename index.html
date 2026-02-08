@@ -4,6 +4,38 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Shreyansh Vaishnav | Site Reliability Engineer</title>
+    
+    <!-- CRITICAL: Define showSection FIRST before anything else -->
+    <script>
+        window.showSection = function(sectionId, clickedElement) {
+            console.log('Switching to section:', sectionId);
+            
+            // Hide all sections
+            document.querySelectorAll('.content-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Remove active from all tabs
+            document.querySelectorAll('.nav-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Show selected section
+            const selectedSection = document.getElementById(sectionId);
+            if (selectedSection) {
+                selectedSection.classList.add('active');
+                console.log('Section found and activated:', sectionId);
+            } else {
+                console.error('Section not found:', sectionId);
+            }
+            
+            // Add active to clicked tab
+            if (clickedElement) {
+                clickedElement.classList.add('active');
+            }
+        };
+    </script>
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
@@ -12,6 +44,12 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
 
         :root {
@@ -34,6 +72,8 @@
             line-height: 1.6;
             overflow-x: hidden;
             position: relative;
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
         }
 
         /* Animated background grid */
@@ -68,6 +108,14 @@
             z-index: 9999;
             transition: transform 0.2s ease;
             opacity: 0.5;
+            display: none; /* Hidden by default */
+        }
+
+        /* Show cursor trail only on desktop with mouse */
+        @media (hover: hover) and (pointer: fine) {
+            .cursor-trail {
+                display: block;
+            }
         }
 
         /* Container */
@@ -605,40 +653,306 @@
         }
 
         /* Responsive */
+        @media (max-width: 1200px) {
+            .container {
+                max-width: 100%;
+                padding: 15px;
+            }
+
+            .projects-grid {
+                grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            }
+        }
+
         @media (max-width: 1024px) {
             .hero-content {
                 grid-template-columns: 1fr;
+                gap: 30px;
             }
 
             .hero-text h1 {
-                font-size: 2.5rem;
+                font-size: 2.8rem;
             }
 
             .projects-grid {
                 grid-template-columns: 1fr;
             }
+
+            .skills-list {
+                grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            }
         }
 
         @media (max-width: 768px) {
             .container {
-                padding: 15px;
+                padding: 10px;
+            }
+
+            .terminal-header {
+                padding: 20px;
             }
 
             .hero-text h1 {
-                font-size: 2rem;
+                font-size: 2.2rem;
+                line-height: 1.2;
+            }
+
+            .terminal-prompt {
+                font-size: 1rem;
+            }
+
+            .role-description {
+                font-size: 0.95rem;
+            }
+
+            .metrics-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 10px;
+            }
+
+            .metric-card {
+                padding: 12px;
+            }
+
+            .metric-value {
+                font-size: 1.3rem;
+            }
+
+            .nav-tabs {
+                overflow-x: auto;
+                flex-wrap: nowrap;
+                -webkit-overflow-scrolling: touch;
+                scrollbar-width: none;
+                -ms-overflow-style: none;
+                padding-bottom: 5px;
+            }
+
+            .nav-tabs::-webkit-scrollbar {
+                display: none;
+            }
+
+            .nav-tab {
+                flex-shrink: 0;
+                padding: 10px 20px;
+                font-size: 0.85rem;
+                white-space: nowrap;
+            }
+
+            .project-card {
+                padding: 20px;
+            }
+
+            .project-title {
+                font-size: 1.15rem;
+            }
+
+            .tech-tags {
+                gap: 6px;
+            }
+
+            .tech-tag {
+                font-size: 0.7rem;
+                padding: 3px 8px;
+            }
+
+            .timeline {
+                padding-left: 25px;
+            }
+
+            .timeline-item {
+                padding: 20px;
+            }
+
+            .timeline-title {
+                font-size: 1.15rem;
+            }
+
+            .timeline-company {
+                font-size: 0.9rem;
+            }
+
+            .skills-list {
+                grid-template-columns: 1fr;
+            }
+
+            .contact-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .status-bar {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+
+            .status-item {
+                font-size: 0.8rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-text h1 {
+                font-size: 1.8rem;
             }
 
             .metrics-grid {
                 grid-template-columns: 1fr;
             }
 
-            .nav-tabs {
-                overflow-x: auto;
-                flex-wrap: nowrap;
+            .metric-card {
+                padding: 10px;
             }
 
-            .timeline {
-                padding-left: 25px;
+            .nav-tab {
+                padding: 8px 15px;
+                font-size: 0.8rem;
+            }
+
+            .project-card,
+            .timeline-item,
+            .skills-category {
+                padding: 15px;
+            }
+
+            .project-title {
+                font-size: 1rem;
+            }
+
+            .project-description {
+                font-size: 0.9rem;
+            }
+
+            .timeline-title {
+                font-size: 1rem;
+            }
+
+            .achievement-list li {
+                font-size: 0.85rem;
+            }
+
+            .category-title {
+                font-size: 1.05rem;
+            }
+
+            .contact-card {
+                padding: 20px;
+            }
+
+            .contact-icon {
+                font-size: 1.8rem;
+            }
+
+            .contact-value {
+                font-size: 0.9rem;
+            }
+
+            .terminal-input {
+                padding: 15px;
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .typing-text {
+                font-size: 0.85rem;
+                overflow-wrap: break-word;
+                white-space: normal;
+            }
+        }
+
+        /* Landscape mobile phones */
+        @media (max-width: 896px) and (orientation: landscape) {
+            .hero-text h1 {
+                font-size: 2rem;
+            }
+
+            .metrics-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+
+        /* Tablet landscape */
+        @media (min-width: 768px) and (max-width: 1024px) and (orientation: landscape) {
+            .hero-content {
+                grid-template-columns: 1.2fr 1fr;
+            }
+
+            .projects-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        /* Extra small devices (watches, small phones) */
+        @media (max-width: 375px) {
+            .container {
+                padding: 8px;
+            }
+
+            .terminal-header {
+                padding: 15px;
+            }
+
+            .hero-text h1 {
+                font-size: 1.6rem;
+            }
+
+            .terminal-prompt {
+                font-size: 0.9rem;
+            }
+
+            .role-description {
+                font-size: 0.88rem;
+                line-height: 1.6;
+            }
+
+            .nav-tab {
+                padding: 8px 12px;
+                font-size: 0.75rem;
+            }
+
+            .project-type,
+            .metric-label,
+            .contact-label {
+                font-size: 0.7rem;
+            }
+        }
+
+        /* High resolution displays */
+        @media (min-width: 1400px) {
+            .container {
+                max-width: 1600px;
+            }
+
+            .projects-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        /* Touch device optimizations */
+        @media (hover: none) and (pointer: coarse) {
+            .nav-tab,
+            .project-card,
+            .contact-card,
+            .skill-item {
+                transition: all 0.2s ease;
+            }
+
+            .nav-tab:active {
+                transform: scale(0.98);
+            }
+
+            .contact-card:active {
+                transform: scale(0.98);
+            }
+
+            /* Larger tap targets for mobile */
+            .nav-tab {
+                min-height: 44px;
+                padding: 12px 20px;
+            }
+
+            .contact-card {
+                min-height: 120px;
+                cursor: pointer;
             }
         }
 
@@ -674,16 +988,16 @@
                     <div class="terminal-prompt">shreyansh@sre:~$</div>
                     <h1>Shreyansh Vaishnav</h1>
                     <p class="role-description">
-                        <span class="highlight">Site Reliability Engineer</span> & <span class="highlight">Database Reliability Engineer</span> with 3.5+ years building self-healing infrastructure, optimizing distributed databases, and automating chaos into order.
+                        <span class="highlight">Site Reliability Engineer</span> & <span class="highlight">Database Reliability Engineer</span> with 3.5+ years building self-healing infrastructure, optimizing distributed databases (Oracle, Redis Cluster, Cassandra), and automating chaos into order. Improved MTTR by 25% and reduced incidents by 45%.
                     </p>
                     <div class="status-bar">
                         <div class="status-item">
                             <div class="status-dot"></div>
-                            <span>Available for opportunities</span>
+                            <span>Open to Remote | Hyderabad | Delhi | Pune</span>
                         </div>
                         <div class="status-item">
                             <div class="status-dot" style="background: var(--accent-cyan);"></div>
-                            <span>Pune, India</span>
+                            <span>Currently in Pune, India</span>
                         </div>
                     </div>
                 </div>
@@ -696,7 +1010,7 @@
                         </div>
                         <div class="metric-card">
                             <div class="metric-label">MTTR Reduction</div>
-                            <div class="metric-value">~40%</div>
+                            <div class="metric-value">~25%</div>
                         </div>
                         <div class="metric-card">
                             <div class="metric-label">Query Optimization</div>
@@ -704,7 +1018,7 @@
                         </div>
                         <div class="metric-card">
                             <div class="metric-label">Incident Reduction</div>
-                            <div class="metric-value">25%</div>
+                            <div class="metric-value">45%</div>
                         </div>
                     </div>
                 </div>
@@ -713,16 +1027,16 @@
 
         <!-- Navigation Tabs -->
         <div class="nav-tabs">
-            <div class="nav-tab active" onclick="showSection('projects')">
+            <div class="nav-tab active" onclick="showSection('projects', this)">
                 &gt;_ Projects
             </div>
-            <div class="nav-tab" onclick="showSection('experience')">
+            <div class="nav-tab" onclick="showSection('experience', this)">
                 💼 Experience
             </div>
-            <div class="nav-tab" onclick="showSection('skills')">
+            <div class="nav-tab" onclick="showSection('skills', this)">
                 🛠️ Tech Stack
             </div>
-            <div class="nav-tab" onclick="showSection('contact')">
+            <div class="nav-tab" onclick="showSection('contact', this)">
                 📡 Contact
             </div>
         </div>
@@ -736,7 +1050,7 @@
                             <div class="project-type">SRE • Automation</div>
                             <h3 class="project-title">Sentinel-SRE: SLO-Driven Autonomous Remediation</h3>
                         </div>
-                        <div class="project-impact">↓40% MTTR</div>
+                        <div class="project-impact">↓25% MTTR</div>
                     </div>
                     <p class="project-description">
                         Engineered a self-healing reliability framework using <strong>Prometheus</strong> for SLO monitoring and <strong>Ansible</strong> for automated incident response. The system detects error budget burn rates and automatically remediates performance bottlenecks before they impact users.
@@ -875,7 +1189,9 @@
                         <strong>Database Operations & Performance:</strong>
                     </div>
                     <ul class="achievement-list">
-                        <li>Managed and optimized multiple database platforms (<strong>Oracle</strong>, <strong>Cassandra</strong>, <strong>Redis</strong>, <strong>Elasticsearch</strong>) across dev, staging, and production</li>
+                        <li>Managed and optimized multiple database platforms (<strong>Oracle Database</strong>, <strong>Cassandra</strong>, <strong>Redis Cluster</strong>, <strong>Elasticsearch</strong>) across dev, staging, and production environments</li>
+                        <li>Administered <strong>Oracle DB</strong> instances including performance tuning, backup/recovery operations, and high availability configurations</li>
+                        <li>Deployed and maintained <strong>Redis Cluster</strong> for high-performance caching and session management with automatic failover</li>
                         <li>Performed SQL tuning, schema optimizations, and indexing improvements, achieving up to <strong>50% faster query response times</strong></li>
                         <li>Implemented backup and disaster recovery strategies using <strong>RMAN</strong> and <strong>Data Pump</strong> for Oracle and snapshot/streaming backups for NoSQL systems</li>
                         <li>Performed schema migrations, storage partitioning, and tablespace management to support rapidly growing datasets</li>
@@ -887,7 +1203,7 @@
                     <ul class="achievement-list">
                         <li>Led incident response and performed root cause analysis (RCA) for database and infrastructure outages</li>
                         <li>Maintained <strong>Kafka clusters</strong> supporting real-time event processing; ensured high throughput and resilience</li>
-                        <li>Reduced recurring incidents by 25% through proactive alerting and automated safeguards</li>
+                        <li>Reduced recurring incidents by <strong>45%</strong> through proactive alerting and automated safeguards</li>
                     </ul>
 
                     <div class="tech-tags" style="margin-top: 20px;">
@@ -896,11 +1212,37 @@
                         <span class="tech-tag">Ansible</span>
                         <span class="tech-tag">Prometheus</span>
                         <span class="tech-tag">Grafana</span>
-                        <span class="tech-tag">Oracle</span>
+                        <span class="tech-tag">Oracle DB</span>
+                        <span class="tech-tag">Redis Cluster</span>
                         <span class="tech-tag">Cassandra</span>
-                        <span class="tech-tag">Redis</span>
                         <span class="tech-tag">Kafka</span>
                         <span class="tech-tag">ELK Stack</span>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-date">February 2022 – March 2022</div>
+                    <h3 class="timeline-title">Data Analyst Intern</h3>
+                    <div class="timeline-company">Saint Louis University · Globalshala | Remote, India</div>
+                    
+                    <div class="timeline-description">
+                        Worked as a Data Analyst Intern for Globalshala in collaboration with Saint Louis University, leveraging data visualization and analytics to derive actionable insights from complex datasets.
+                    </div>
+                    
+                    <ul class="achievement-list">
+                        <li>Utilized <strong>Python libraries</strong> (Pandas, NumPy, Matplotlib, Seaborn) for data manipulation, statistical analysis, and exploratory data analysis (EDA)</li>
+                        <li>Created <strong>dynamic visualizations</strong> and interactive dashboards using <strong>Tableau</strong> to communicate insights to stakeholders</li>
+                        <li>Performed data cleaning, transformation, and feature engineering to prepare datasets for analysis</li>
+                        <li>Collaborated with cross-functional teams to identify key performance indicators and data-driven recommendations</li>
+                    </ul>
+
+                    <div class="tech-tags" style="margin-top: 20px;">
+                        <span class="tech-tag">Python</span>
+                        <span class="tech-tag">Pandas</span>
+                        <span class="tech-tag">NumPy</span>
+                        <span class="tech-tag">Tableau</span>
+                        <span class="tech-tag">Data Visualization</span>
+                        <span class="tech-tag">EDA</span>
                     </div>
                 </div>
 
@@ -963,11 +1305,12 @@
                     Databases & Data Stores
                 </h3>
                 <div class="skills-list">
-                    <div class="skill-item"><span class="skill-bullet">▸</span> Oracle Database</div>
+                    <div class="skill-item"><span class="skill-bullet">▸</span> Oracle Database (DBA, Tuning)</div>
+                    <div class="skill-item"><span class="skill-bullet">▸</span> Redis Cluster (HA, Caching)</div>
                     <div class="skill-item"><span class="skill-bullet">▸</span> Apache Cassandra</div>
-                    <div class="skill-item"><span class="skill-bullet">▸</span> Redis</div>
                     <div class="skill-item"><span class="skill-bullet">▸</span> Elasticsearch</div>
                     <div class="skill-item"><span class="skill-bullet">▸</span> SQL Tuning & Optimization</div>
+                    <div class="skill-item"><span class="skill-bullet">▸</span> Database Performance Monitoring</div>
                 </div>
             </div>
 
@@ -1013,6 +1356,20 @@
             <div class="skills-category">
                 <h3 class="category-title">
                     <div class="category-icon"></div>
+                    Data Analytics & Visualization
+                </h3>
+                <div class="skills-list">
+                    <div class="skill-item"><span class="skill-bullet">▸</span> Python (Pandas, NumPy, Matplotlib)</div>
+                    <div class="skill-item"><span class="skill-bullet">▸</span> Tableau</div>
+                    <div class="skill-item"><span class="skill-bullet">▸</span> Exploratory Data Analysis (EDA)</div>
+                    <div class="skill-item"><span class="skill-bullet">▸</span> Data Visualization</div>
+                    <div class="skill-item"><span class="skill-bullet">▸</span> Statistical Analysis</div>
+                </div>
+            </div>
+
+            <div class="skills-category">
+                <h3 class="category-title">
+                    <div class="category-icon"></div>
                     Operating Systems & Tools
                 </h3>
                 <div class="skills-list">
@@ -1045,7 +1402,7 @@
                 <div class="contact-card" onclick="window.location.href='mailto:vaishnavshreyansh322001@gmail.com'">
                     <div class="contact-icon">📧</div>
                     <div class="contact-label">Email</div>
-                    <div class="contact-value">vaishnavshreyansh322001@gmail.com</div>
+                    <div class="contact-value"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="e791868e948f898691948f95829e8689948fd4d5d5d7d7d6a7808a868e8bc984888a">[email&#160;protected]</a></div>
                 </div>
 
                 <div class="contact-card" onclick="window.location.href='tel:+919370897072'">
@@ -1054,16 +1411,16 @@
                     <div class="contact-value">+91 9370897072</div>
                 </div>
 
-                <div class="contact-card" onclick="window.open('https://linkedin.com/in/shreyansh-vaishnav', '_blank')">
+                <div class="contact-card" onclick="window.open('https://www.linkedin.com/in/shreyansh-vaishnav-1663b617b/', '_blank')">
                     <div class="contact-icon">💼</div>
                     <div class="contact-label">LinkedIn</div>
-                    <div class="contact-value">linkedin.com/in/shreyansh-vaishnav</div>
+                    <div class="contact-value">linkedin.com/in/shreyansh-vaishnav-1663b617b</div>
                 </div>
 
                 <div class="contact-card">
                     <div class="contact-icon">📍</div>
                     <div class="contact-label">Location</div>
-                    <div class="contact-value">Pune, India</div>
+                    <div class="contact-value">Remote | Pune | Hyderabad | Delhi</div>
                 </div>
             </div>
 
@@ -1083,29 +1440,33 @@
     <script>
         // Cursor trail effect
         const cursorTrail = document.getElementById('cursorTrail');
-        document.addEventListener('mousemove', (e) => {
-            cursorTrail.style.left = e.clientX + 'px';
-            cursorTrail.style.top = e.clientY + 'px';
-        });
-
-        // Tab navigation
-        function showSection(sectionId) {
-            // Hide all sections
-            document.querySelectorAll('.content-section').forEach(section => {
-                section.classList.remove('active');
+        if (cursorTrail) {
+            document.addEventListener('mousemove', (e) => {
+                cursorTrail.style.left = e.clientX + 'px';
+                cursorTrail.style.top = e.clientY + 'px';
             });
-            
-            // Remove active from all tabs
-            document.querySelectorAll('.nav-tab').forEach(tab => {
-                tab.classList.remove('active');
-            });
-            
-            // Show selected section
-            document.getElementById(sectionId).classList.add('active');
-            
-            // Add active to clicked tab
-            event.target.classList.add('active');
         }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('Portfolio loaded');
+            
+            // Ensure projects section is visible on load
+            const projectsSection = document.getElementById('projects');
+            if (projectsSection) {
+                projectsSection.classList.add('active');
+            }
+            
+            // Animate metrics on load
+            const metricValues = document.querySelectorAll('.metric-value');
+            metricValues.forEach((metric, index) => {
+                metric.style.opacity = '0';
+                setTimeout(() => {
+                    metric.style.transition = 'opacity 0.5s ease';
+                    metric.style.opacity = '1';
+                }, index * 100);
+            });
+        });
 
         // Smooth scroll for better UX
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
@@ -1128,13 +1489,4 @@
         document.addEventListener('DOMContentLoaded', () => {
             const metricValues = document.querySelectorAll('.metric-value');
             metricValues.forEach((metric, index) => {
-                metric.style.opacity = '0';
-                setTimeout(() => {
-                    metric.style.transition = 'opacity 0.5s ease';
-                    metric.style.opacity = '1';
-                }, index * 100);
-            });
-        });
-    </script>
-</body>
-</html>
+                metric.style.opacity = '0
